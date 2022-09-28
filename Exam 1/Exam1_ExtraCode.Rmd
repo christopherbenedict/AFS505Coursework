@@ -1,0 +1,345 @@
+---
+title: "Exam1BankCode"
+author: "Chris Benedict"
+date: "9/28/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+```{r Question 2a}
+
+#Question 2f
+#From: https://stackoverflow.com/questions/69042702/calculate-mean-value-of-data-in-r-on-fixed-date-range-for-multiple-years
+library(lubridate)
+library(tidyr)
+d %>% 
+   mutate(is_crop_season = date %within% interval(ISOdate(year, 1981:1990), 
+                                                  ISOdate(year, 1991:2000),                                                    
+                                                  ISOdate(year, 2001:2019)) %>%
+   group_by(yield_all_bind, year = year(YYYY-MM-DD(DOY))) %>%
+   summarise(mean = mean(yield)) %>%
+   pivot_wider(year, 
+               yield_all_bind, 
+               names_glue = "{ifelse(yield_all_bind, 'crop_season', 'no_crop_season')}", 
+               values_from = mean)
+
+#Possible other solution: https://rdrr.io/cran/openair/man/selectByDate.html; https://www.rdocumentation.org/packages/openair/versions/2.8-6/topics/selectByDate
+selectByDate(
+  mydata,
+  start = "1/1/2001",
+  end = "31/12/2019",
+  year = 2019,
+  month = 1,
+  day = "weekday",
+  hour = 1
+)
+
+library(lubridate)
+
+data.1981.1990 <- selectByDate(yield_all_bind, start = "1981-1-1", end = "1990-12-31")
+head(data.1981.1990)
+tail(data.1981.1990)
+
+walla.sub.early <- yield_all_bind[(yield_all_bind$county name = "Walla Walla")& (yield_all_bind$crop name = "Winter Wheat")$ (yield_all_bind$`YYYY-MM-DD(DOY)`)]
+
+
+#Question 2e
+walla_crop_loc1 <- combined_data[ which(combined_data$cropname == "Winter_Wheat" & combined_data$latlong == "46.03125N118.40625W" & combined_data$YYYY.MM.DD.DOY. > 1981-07-05 & combined_data$YYYY.MM.DD.DOY. < 1990-07-07)]
+walla_crop_loc1
+
+walla_crop_loc_per1 <- combined_data[combined_data$YYYY.MM.DD.DOY. > 1981-07-05 & combined_data$YYYY.MM.DD.DOY. < 1990-07-07]
+walla_crop_loc_per1
+
+
+
+library(dplyr)
+combined_data %>% filter(row(combined_data) == 278:287)
+cat("average yield of Winter Wheat in Walla Walla at 46.03125N118.40625W for the year ranges (1981-1990), (1991-2000), and (2001-2019)\n")
+with(combined_data, tapply(yield, INDEX=list(cropname, countyname),FUN=sum))
+
+combined_data %>%
+  group_by(countyname, cropname) %>%
+  summarise_at(var(pts), list(yield=mean))
+
+cat("average yield of Winter Wheat in Walla Walla at 46.03125N118.40625W for the year ranges (1981-1990), (1991-2000), and (2001-2019)\n\n")
+yi.walla.walla <- aggregate(yield_all_bind[,c(,8:9)], by=list(yield_all_bind$cropname, yield_all_bind$countyname),FUN=sum)
+
+cat("average yield of Winter Wheat in Walla Walla at 46.03125N118.40625W for specific year ranges\n")
+with(combined_data, tapply(irrigation_demand, INDEX=list(cropname, countyname),FUN=sum))
+
+#split latitude (northing) and longitude (easting)
+final.file <- current_data %>% separate(3, c("latitude", "longitude"), sep = "(?<=N)")
+final.file
+## Question 2a {.tabset}
+#get list of all the files you need via list.files then loop through list and read file info add information crop/county/lat/long
+  #string manipulation
+#sub.string function useful here, add columns, merge files
+#OR Use apply class function
+
+setwd("/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1")
+library("dplyr")
+library("readr")
+library("plyr")
+
+#THIS ONE!!!
+#using list.files and bind_rows with lapply 
+yield_all_bind <- list.files(path = "/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults",  
+                       pattern = "*.csv", recursive = TRUE, full.names = TRUE, include.dirs = TRUE)%>%  
+   
+#(read_csv)
+  yield_all_bind # Print data
+  
+yield_all_bind <- list.files(path = "/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults",  
+                       pattern = "*.csv", recursive = TRUE, full.names = TRUE, include.dirs = TRUE)%>%  
+  lapply(read_csv)
+  bind_rows # Combine data sets
+  yield_all_bind # Print data
+  
+  
+
+#adapted from https://stackoverflow.com/questions/34424947/how-do-i-create-a-loop-in-a-file-path
+setwd("/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1")
+library("dplyr")
+library("readr")
+library("plyr")
+
+allfiles <- list.files(path = "/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults",  
+                       pattern = "*.csv", recursive = TRUE, full.names = TRUE)%>%
+  file.list <- lapply(allfiles, read.table)
+  setattr*file.list, "names", files)
+  allfilescombined <- rbind(file.list, idcol = "id")[, id := substr(id, 1, 4)]
+  
+  write.table(allfilescombined, "//tsclient/C/Users/xxx/datasets/foldername.txt", sep="\t")
+  
+  
+  
+
+  bind_rows # Combine data sets 
+
+  
+
+yield_all_bind # Print data 
+
+as.data.frame(yield_all_bind)
+
+
+
+
+
+
+
+locdata <- data.frame(path = c('Okanogan/Corn_grain/48.15625N119.71875W/seasonal_result.csv',
+'Okanogan/Corn_grain/48.96875N119.65625W/seasonal_result.csv',
+'Okanogan/Winter_Wheat/48.15625N119.71875W/seasonal_result.csv',
+'Okanogan/Winter_Wheat/48.53125N119.59375W/seasonal_result.csv',
+'WallaWalla/Corn_grain/46.03125N118.21875W/seasonal_result.csv',
+'WallaWalla/Corn_grain/46.28125N118.65625W/seasonal_result.csv',
+'WallaWalla/Winter_Wheat/46.03125N118.21875W/seasonal_result.csv',
+'WallaWalla/Winter_Wheat/46.03125N118.40625W/seasonal_result.csv',
+'Yakima/Corn_grain/46.15625N119.96875W/seasonal_result.csv',
+'Yakima/Corn_grain/46.21875N119.34375W/seasonal_result.csv',
+'Yakima/Winter_Wheat/46.15625N119.34375W/seasonal_result.csv',
+'Yakima/Winter_Wheat/46.21875N119.34375W/seasonal_result.csv'),
+                stringsAsFactors = F)
+
+
+locdata$file_dir <- basename(dirname(locdata$path))
+locdata
+
+yield_all_bind # Print data 
+
+as.data.frame(yield_all_bind)
+##leave alone everything above
+
+
+#attempt at a basic way to insert columns
+library(stringr)
+
+# get this via list.files in your actual code
+files <- c("ctrl_S978765_uns_dummy_00_none.txt",
+           "ctrl_S978765_3S_Cookie_00_none.txt",
+           "S59607_3S_goody_3M_V10.txt",
+           "ctrlnuc30-100_S3245678_DMSO_00_none.txt",
+           "ctrlRAP_S0846567_3S_Dex_none.txt",
+           "S6498432_2S_Fulra_30mM_V100.txt")
+
+ids <- data.frame(`ID Code` = c("S978765", "S978765", "S306223", "S897458", "S514486"),
+                  CLnumber = c(1, 2, 1, 1, 2),
+                  stringsAsFactors = FALSE)
+
+str_subset(files, paste(ids$ID.Code, collapse = "|"))
+#> [1] "ctrl_S978765_uns_dummy_00_none.txt" "ctrl_S978765_3S_Cookie_00_none.txt"
+
+#File path example: /Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults/Okanogan/Corn_grain/48.15625N119.71875W
+library(stringi)
+library(purrr)
+
+filelist <- list.files(recursive=TRUE)
+
+map_df(filelist, function(x) {
+
+  df <- read.csv(x) # reading in data
+
+  stri_split_regex(filelist[1], "["","","","","","",file ]")[[1]][-c(1,2,3,9,10)] %>% 
+    setNames(c("county name", "crop name", "latitude", "longitude")) %>% 
+    as.list() -> fields
+  
+  #stri_split_regex(filelist[1], "[\\\\\\.\.\.\.\]")[[1]][-c(1,2,3,9,10)] %>% 
+    #setNames(c("county name", "crop name", "latitude", "longitude")) %>% 
+    #as.list() -> fields
+
+  cbind(df, fields)  
+
+})
+
+dirname (file.path("","", "", "", "", "", "p1","p2","p3", "filename"))
+
+#Another attempt from:https://stackoverflow.com/questions/54887482/r-adding-filepath-to-each-row-of-a-dataframe/54888162#54888162
+d <- data.frame(path = c('/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults', 'path/to/another/file.csv'),
+                stringsAsFactors = F)
+
+d$file_dir <- basename(dirname(d$path))
+
+d
+
+#>                       path file_dir
+#> 1    path/to/some/file.csv     some
+#> 2 path/to/another/file.csv  another
+
+
+
+
+
+
+
+
+
+##look here to insert values based on file name: https://stackoverflow.com/questions/43999118/loop-to-insert-values-in-a-column-based-on-file-name-and-save-in-different-direc
+setwd("/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1")
+yield_all_bind <- list.filespattern = (pattern = ".csv")
+library(data.table)
+
+data_list <- list()
+
+for(i in 1:length(files)){
+  file_name <- files[i]
+  d = fread(file_name, sep=",")
+
+  #Change columns names
+  colnames(d) <- c("County","Crop","Latitude_Longitude")
+
+  # Split the string by "_"
+  filenames_vec <- strsplit(file_name, split = "_")[[1]]
+
+  # Create new column to store the information
+  d$PPT_N_NUMBER <- filenames_vec[1]
+  data_list[[i]] <- d
+}
+all_data <- rbindlist(data_list)
+fwrite(all_data, '../directory1/all_data.csv')
+
+##From: https://datacornering.com/how-to-combine-files-with-r-and-add-filename-column/
+library(dplyr)
+library(data.table)
+
+# read file path
+all_paths <-
+  list.files(path = "/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults",
+             pattern = "*.csv",
+             recursive = TRUE, 
+             full.names = TRUE)
+
+# read file content
+all_content <-
+  all_paths %>%
+  lapply(read.table,
+         header = TRUE,
+         sep = "\t",
+         encoding = "UTF-8")
+
+# read file name
+all_filenames <- all_paths %>%
+  basename() %>%
+  as.list()
+
+# combine file content list and file name list
+all_lists <- mapply(c, all_content, all_filenames, SIMPLIFY = FALSE)
+
+# unlist all lists and change column name
+all_result <- rbindlist(all_lists, fill = T)
+# change column name
+names(all_result)[3] <- "/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults"
+
+
+```
+```{r Unused code that I don't want to pitch}
+#queston 2a
+#using list.files and lapply within bind_rows
+yield_all_bind_rows <- list.files(path = "/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults",  
+                       pattern = "*.csv", recursive = TRUE, full.names = TRUE) 
+yield_data_frame <- do.call(bind_rows,lapply("/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults",read_csv))
+
+#using list.files with cbind with lapply
+yield_all_rbind <- list.files(path = "/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults",  
+                       pattern = "*.csv", recursive = TRUE, full.names = TRUE)%>% 
+cbind(gsub(".csv", "", basename("/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults")), do.call(rbind, lapply("/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults", read.csv)))
+
+
+
+#this one works, but does not combine files
+yield.all.dat <- list.files(path = "/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults", pattern = NULL, all.files = FALSE,
+           full.names = FALSE, recursive = TRUE,
+           ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
+
+       dir(path = "/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults", pattern = NULL, all.files = FALSE,
+           full.names = FALSE, recursive = TRUE,
+           ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
+
+list.dirs(path = "/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults", full.names = TRUE, recursive = TRUE)
+yield.all.dat
+
+
+setwd("MacintoshHD/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults")
+
+for (data in list.files("MacintoshHD/Users/chrisbenedict/Desktop/AFS505DataFolder/Exam1/CropModelResults")){
+  
+  # Create the first data if no data exist yet
+  if (!exists("dataset")){
+    yield.dat <- read.csv(data, header=TRUE)
+  }
+  
+  # if data already exist, then append it together
+  if (exists("dataset")){
+    tempory <-read.csv(data, header=TRUE)
+    yield.dat <-unique(rbind(dataset, tempory))
+    rm(tempory)
+  }
+}
+View(yield.dat)  
+```
+
+
+
+
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
